@@ -1,10 +1,22 @@
 from datetime import timedelta
 
 from django.db import models
+from django_countries.fields import CountryField
 
 
 class Lifetime(models.Model):
+    name: models.CharField = models.CharField(
+        max_length=200, null=True, blank=True
+    )
     birth_date: models.DateField = models.DateField()
+    death_date: models.DateField = models.DateField(null=True, blank=True)
+    country = CountryField(blank=True, null=True)
+    sex: models.CharField = models.CharField(
+        max_length=1,
+        choices=[("M", "Male"), ("F", "Female"), ("O", "Other")],
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return f"Lifetime starting on {self.birth_date}"
