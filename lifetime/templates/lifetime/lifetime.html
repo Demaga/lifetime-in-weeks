@@ -1,0 +1,143 @@
+{% load static %}
+{% load lifetime_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life in Weeks - {{ lifetime.birth_date }}</title>
+    <style>
+        .weeks-container {
+            display: flex;
+            margin: 20px;
+        }
+
+        .year-labels {
+            width: 51.5px;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .year-label {
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .weeks-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 3.5px;
+        }
+
+        .year-row {
+            display: flex;
+            gap: 5px;
+            height: 25px;
+        }
+
+        .year-container .year-row:first-child {
+            padding-bottom: 1.5px;
+        }
+
+        .week {
+            width: 25px;
+            height: 25px;
+            background-color: #eee;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .week:hover {
+            background-color: #ddd;
+        }
+
+        .week.has-events {
+            background-color: #4CAF50;
+        }
+
+        .week.past {
+            background-color: #2196F3;
+        }
+
+        .week.death {
+            background-color: #000;
+        }
+
+        .week.after-death {
+            background-color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .week {
+                width: 15px;
+                height: 15px;
+            }
+
+            .year-row {
+                height: 15px;
+            }
+
+            .year-label {
+                height: 35px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Life in Weeks</h1>
+        <p>Birth date: {{ lifetime.birth_date }}</p>
+    </header>
+
+    <div class="weeks-container">
+        <div class="year-labels">
+            {% for year in "x"|rjust:"120" %}
+            <div class="year-label">Year {{ forloop.counter }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="weeks-grid">
+            {% with weeks_with_events=lifetime.events.all|map_weeks_to_events %}
+            {% for year in "x"|rjust:"120" %}
+            {% with year_start=forloop.counter0|multiply:52 %}
+            <div class="year-container">
+                <!-- First half of the year (weeks 1-26) -->
+                <div class="year-row">
+                    {% for week in "x"|rjust:"26" %}
+                    {% with week_number=year_start|add:forloop.counter %}
+                    <div class="week {% if week_number in weeks_with_events %}has-events{% endif %} {% if week_number <= current_week %}past{% endif %} {% if death_week and week_number == death_week %}death{% endif %} {% if death_week and week_number > death_week %}after-death{% endif %}"
+                        title="Week {{ week_number }}"></div>
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+
+                <!-- Second half of the year (weeks 27-52) -->
+                <div class="year-row">
+                    {% for week in "x"|rjust:"26" %}
+                    {% with week_number=year_start|add:26|add:forloop.counter %}
+                    <div class="week {% if week_number in weeks_with_events %}has-events{% endif %} {% if week_number <= current_week %}past{% endif %} {% if death_week and week_number == death_week %}death{% endif %} {% if death_week and week_number > death_week %}after-death{% endif %}"
+                        title="Week {{ week_number }}"></div>
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <script>
+        // Add any interactive features here
+    </script>
+</body>
+
+</html>

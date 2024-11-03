@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.db import models
 from django_countries.fields import CountryField
 
@@ -19,38 +17,25 @@ class Lifetime(models.Model):
     )
 
     def __str__(self):
-        return f"Lifetime starting on {self.birth_date}"
-
-
-class Week(models.Model):
-    lifetime: models.ForeignKey = models.ForeignKey(
-        Lifetime, on_delete=models.CASCADE, related_name="weeks"
-    )
-    week_number: models.PositiveIntegerField = models.PositiveIntegerField()
-
-    class Meta:
-        unique_together = ["lifetime", "week_number"]
-        ordering = ["week_number"]
-
-    def __str__(self):
-        return (
-            f"Week {self.week_number} of lifetime"
-            " starting on {self.lifetime.birth_date}"
-        )
-
-    @property
-    def start_date(self):
-        return self.lifetime.birth_date + timedelta(
-            days=7 * (self.week_number - 1)
-        )
+        if self.name:
+            return f"{self.name} - {self.birth_date}"
+        else:
+            return f"Lifetime starting on {self.birth_date}"
 
 
 class Event(models.Model):
     title: models.CharField = models.CharField(max_length=200)
     description: models.TextField = models.TextField(blank=True)
-    week: models.ForeignKey = models.ForeignKey(
-        Week, on_delete=models.CASCADE, related_name="events"
+    lifetime: models.ForeignKey = models.ForeignKey(
+        Lifetime, on_delete=models.CASCADE, related_name="events"
     )
+    date: models.DateField = models.DateField()
 
     def __str__(self):
-        return f"{self.title} (Week {self.week.week_number})"
+        return f"{self.title} ({self.date})"
+
+    @property
+    def week_number(self):
+        """Calculate the week number based on event date and birth date"""
+        delta = self.date - self.lifetime.birth_date
+        return (delta.days // 7) + 1
