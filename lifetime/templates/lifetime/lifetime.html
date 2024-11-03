@@ -94,7 +94,11 @@
 <body>
     <header>
         <h1>Life in Weeks</h1>
-        <p>Birth date: {{ lifetime.birth_date }}</p>
+        {% if lifetime.name %}
+            <p><b>{{ lifetime.name }}</b> ({{ lifetime.birth_date }} - {{ lifetime.death_date }})</p>
+        {% else %}
+            <p>Birth date: {{ lifetime.birth_date }}</p>
+        {% endif %}
     </header>
 
     <div class="weeks-container">
