@@ -56,3 +56,91 @@ footer {
     padding: 1rem;
     border-top: 1px solid #ddd;
 }
+
+.weeks-container {
+    display: flex;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.weeks-container * {
+    margin: 0 auto;
+}
+
+.year-labels {
+    width: 51.5px;
+    text-align: right;
+    padding-right: 10px;
+    margin-right: 0px;
+}
+
+.year-label {
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 12px;
+    color: #666;
+}
+
+.weeks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5px;
+    margin-left: 0px;
+}
+
+.year-row {
+    display: flex;
+    gap: 5px;
+    height: 25px;
+}
+
+.year-container .year-row:first-child {
+    padding-bottom: 1.5px;
+}
+
+.week {
+    width: 25px;
+    height: 25px;
+    background-color: #eee;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.week:hover {
+    background-color: #ddd;
+}
+
+.week.has-events {
+    background-color: #4CAF50;
+}
+
+.week.past {
+    background-color: #2196F3;
+}
+
+.week.death {
+    background-color: #000;
+}
+
+.week.after-death {
+    background-color: #999;
+}
+
+@media (max-width: 768px) {
+    .week {
+        width: 15px;
+        height: 15px;
+    }
+
+    .year-row {
+        height: 15px;
+    }
+
+    .year-label {
+        height: 35px;
+        font-size: 10px;
+    }
+}

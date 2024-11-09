@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.db import models
 from django_countries.fields import CountryField
+
+from .utils import weeks_between_two_dates
 
 
 class Lifetime(models.Model):
@@ -15,12 +18,25 @@ class Lifetime(models.Model):
         null=True,
         blank=True,
     )
+    created_by: models.ForeignKey = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="created_lifetimes",
+    )
+    created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         if self.name:
             return f"{self.name} - {self.birth_date}"
         else:
             return f"Lifetime starting on {self.birth_date}"
+
+    @property
+    def is_admin_created(self):
+        """Check if the Lifetime was created by an admin user"""
+        return self.created_by and self.created_by.is_staff
 
 
 class Event(models.Model):
@@ -37,5 +53,4 @@ class Event(models.Model):
     @property
     def week_number(self):
         """Calculate the week number based on event date and birth date"""
-        delta = self.date - self.lifetime.birth_date
-        return (delta.days // 7) + 1
+        return weeks_between_two_dates(self.date, self.lifetime.birth_date)

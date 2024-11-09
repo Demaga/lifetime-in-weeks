@@ -1,89 +1,77 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lifetime in Weeks</title>
-    <link rel="stylesheet" href="{% static 'lifetime/style.css' %}">
-</head>
-<body>
-    <header>
-        <h1>Lifetime in Weeks</h1>
-        <p>Visualize your life, one week at a time</p>
-    </header>
+{% extends "lifetime/base.html" %}
 
-    <main>
-        <section class="lifetime-form">
-            <form method="post" id="lifetimeForm">
-                {% csrf_token %}
-                
-                <div class="form-page" id="page1">
-                    <h2>Enter Birth Date</h2>
-                    <div class="form-group">
-                        <label for="birth_date">Birth Date:</label>
-                        <input type="date" id="birth_date" name="birth_date" required>
-                    </div>
-                    <div class="button-group">
-                        <button type="button" onclick="showPage2()">Continue</button>
-                    </div>
-                </div>
+{% block main %}
+<header>
+    <h1>Lifetime in Weeks</h1>
+    <p>Visualize your life, one week at a time</p>
+</header>
 
-                <div class="form-page" id="page2" style="display: none;">
-                    <h2>Additional Details</h2>
-                    <p class="form-info">These details help calculate a more accurate life expectancy, but are completely optional.</p>
-                    
-                    <div class="form-group">
-                        <label for="country">Country:</label>
-                        {{ form.country }}
-                    </div>
-                    <div class="form-group">
-                        <label for="sex">Sex:</label>
-                        <select id="sex" name="sex">
-                            <option value="">Prefer not to say</option>
-                            <option value="M">Male</option>
-                            <option value="F">Female</option>
-                            <option value="O">Other</option>
-                        </select>
-                    </div>
-                    <div class="button-group">
-                        <button type="button" onclick="showPage1()">Back</button>
-                        <button type="submit">Visualize Lifetime</button>
-                    </div>
-                </div>
-            </form>
-        </section>
+<section class="lifetime-form">
+    <form method="post" id="lifetimeForm">
+        {% csrf_token %}
 
-        {% if lifetimes %}
-        <section class="recent-lifetimes">
-            <h2>Recent Visualizations</h2>
-            <ul>
-                {% for lifetime in lifetimes %}
-                <li>
-                    <a href="{% url 'lifetime:detail' lifetime.id %}">
-                        Lifetime starting on {{ lifetime.birth_date }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </section>
-        {% endif %}
-    </main>
+        <div class="form-page" id="page1">
+            <h2>Enter Birth Date</h2>
+            <div class="form-group">
+                <label for="birth_date">Birth Date:</label>
+                <input type="date" id="birth_date" name="birth_date" required>
+            </div>
+            <div class="button-group">
+                <button type="button" onclick="showPage2()">Continue</button>
+            </div>
+        </div>
 
-    <footer>
-        <p>Created to help visualize the precious weeks of our lives</p>
-    </footer>
+        <div class="form-page" id="page2" style="display: none;">
+            <h2>Additional Details</h2>
+            <p class="form-info">These details help calculate a more accurate life expectancy, but are completely
+                optional.</p>
 
-    <script>
-        function showPage1() {
-            document.getElementById('page1').style.display = 'block';
-            document.getElementById('page2').style.display = 'none';
-        }
-        
-        function showPage2() {
-            document.getElementById('page1').style.display = 'none';
-            document.getElementById('page2').style.display = 'block';
-        }
-    </script>
-</body>
-</html>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                {{ form.country }}
+            </div>
+            <div class="form-group">
+                <label for="sex">Sex:</label>
+                <select id="sex" name="sex">
+                    <option value="">Prefer not to say</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="O">Other</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button type="button" onclick="showPage1()">Back</button>
+                <button type="submit">Visualize Lifetime</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+{% if recent_lifetimes %}
+<section class="recent-lifetimes">
+    <h2>Recenttly Added</h2>
+    <ul>
+        {% for lifetime in recent_lifetimes %}
+        <li>
+            <a href="{% url 'lifetime:detail' lifetime.id %}">
+                {{ lifetime.name }} - {{ lifetime.birth_date }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="/celebrities">See all celebrities</a>
+</section>
+{% endif %}
+
+<script>
+    function showPage1() {
+        document.getElementById('page1').style.display = 'block';
+        document.getElementById('page2').style.display = 'none';
+    }
+
+    function showPage2() {
+        document.getElementById('page1').style.display = 'none';
+        document.getElementById('page2').style.display = 'block';
+    }
+</script>
+{% endblock %}

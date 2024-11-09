@@ -1,0 +1,18 @@
+{% extends "lifetime/base.html" %}
+
+{% block main %}
+    <h1>Celebrities</h1>
+
+    <section class="celebrities-lifetimes">
+        <h2>Top Visualizations</h2>
+        <ul>
+            {% for lifetime in lifetimes %}
+            <li>
+                <a href="{% url 'lifetime:detail' lifetime.id %}">
+                    {{ lifetime.name }} - {{ lifetime.birth_date }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock %}
