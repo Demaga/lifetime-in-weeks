@@ -14,10 +14,10 @@
             <h2>Enter Birth Date</h2>
             <div class="form-group">
                 <label for="birth_date">Birth Date:</label>
-                <input type="date" id="birth_date" name="birth_date" required>
+                <input type="date" id="birth_date" name="birth_date" oninput="validateDate()" required>
             </div>
             <div class="button-group">
-                <button type="button" onclick="showPage2()">Continue</button>
+                <button id="first_page_button" type="button" onclick="showPage2()" disabled>Continue</button>
             </div>
         </div>
 
@@ -64,6 +64,18 @@
 {% endif %}
 
 <script>
+    function validateDate() {
+        let button = document.getElementById("first_page_button");
+        let date = document.getElementById("birth_date");
+        console.log(date);
+        if (!date.value) {
+            console.log("Birth date is required")
+        } else {
+            console.log("Value added")
+            button.disabled = false;
+        }
+    }
+
     function showPage1() {
         document.getElementById('page1').style.display = 'block';
         document.getElementById('page2').style.display = 'none';

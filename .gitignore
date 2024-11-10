@@ -2,3 +2,7 @@
 __pycache__
 staticfiles
 .mypy_cache
+flags
+life_expectancy.csv
+.python-version
+.ve

@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
 from .forms import LifetimeForm
@@ -8,7 +9,16 @@ from .utils import weeks_between_two_dates
 
 
 def index(request):
-    form = LifetimeForm()
+    if request.method == "POST":
+        form = LifetimeForm(request.POST)
+        if form.is_valid():
+            from django.http.response import JsonResponse
+
+            return JsonResponse({"ok": True, **form.cleaned_data})
+
+    else:
+        form = LifetimeForm()
+
     context = {
         "form": form,
         "recent_lifetimes": Lifetime.objects.all().order_by("-created_at")[:5],
