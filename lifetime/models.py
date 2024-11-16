@@ -54,3 +54,34 @@ class Event(models.Model):
     def week_number(self):
         """Calculate the week number based on event date and birth date"""
         return weeks_between_two_dates(self.date, self.lifetime.birth_date)
+
+
+class LifetimeExpectancy(models.Model):
+    country: CountryField = CountryField(blank=True, null=True)
+    birth_year: models.IntegerField = models.IntegerField(
+        blank=True, null=True
+    )
+    sex: models.CharField = models.CharField(
+        max_length=1,
+        choices=[("M", "Male"), ("F", "Female"), ("O", "Other")],
+        null=True,
+        blank=True,
+    )
+    life_expectancy: models.FloatField = models.FloatField(
+        blank=True, null=True
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["country", "birth_year", "sex"],
+                name="unique_document_fields",
+            ),
+            # Ensures at least one field is not null using a check constraint
+            models.CheckConstraint(
+                check=models.Q(country__isnull=False)
+                | models.Q(birth_year__isnull=False)
+                | models.Q(sex__isnull=False),
+                name="at_least_one_field_not_null",
+            ),
+        ]
