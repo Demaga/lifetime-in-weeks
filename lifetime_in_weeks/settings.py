@@ -127,4 +127,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-COUNTRIES_FLAG_URL = "flags/{code}_16.png"
+COUNTRIES_FLAG_URL = "flags/{code}.svg"
+COUNTRIES_FIRST = ["US", "CA", "AU", "NZ", "UK", "DE", "FR", "IN"]
+COUNTRIES_FIRST_REPEAT = True
+COUNTRIES_FIRST_BREAK = "---Global---"

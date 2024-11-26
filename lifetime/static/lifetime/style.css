@@ -144,3 +144,9 @@ footer {
         font-size: 10px;
     }
 }
+
+#flag_id_country {
+    width: 42px;
+    vertical-align: middle;
+    margin: -1px 4px 0px!important;
+}
