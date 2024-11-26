@@ -1,10 +1,9 @@
 from datetime import date
 
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
 from .forms import LifetimeForm
-from .models import Lifetime
+from .models import Lifetime, LifetimeExpectancy
 from .utils import weeks_between_two_dates
 
 
@@ -14,7 +13,30 @@ def index(request):
         if form.is_valid():
             from django.http.response import JsonResponse
 
-            return JsonResponse({"ok": True, **form.cleaned_data})
+            birth_year = form.cleaned_data["birth_date"]
+            if birth_year:
+                birth_year = birth_year.year
+                if birth_year > 2024:
+                    birth_year = 2024
+                elif birth_year < 1960:
+                    birth_year = 1960
+            else:
+                birth_year = 2023
+
+            sex = form.cleaned_data["sex"] or "O"
+            country = form.cleaned_data["country"]
+            life_expectancy = LifetimeExpectancy.objects.filter(
+                birth_year=birth_year, sex=sex, country=country
+            ).first()
+
+            return JsonResponse(
+                {
+                    "ok": True,
+                    **form.cleaned_data,
+                    "expectancy": life_expectancy.life_expectancy,
+                    "life": str(life_expectancy),
+                }
+            )
 
     else:
         form = LifetimeForm()
