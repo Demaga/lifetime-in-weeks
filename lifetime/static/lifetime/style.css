@@ -129,6 +129,10 @@ footer {
     background-color: #999;
 }
 
+.week.expected-death {
+    background-color: #666;
+}
+
 @media (max-width: 768px) {
     .week {
         width: 15px;

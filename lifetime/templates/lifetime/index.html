@@ -54,7 +54,7 @@
         {% for lifetime in recent_lifetimes %}
         <li>
             <a href="{% url 'lifetime:detail' lifetime.id %}">
-                {{ lifetime.name }} - {{ lifetime.birth_date }}
+                {{ lifetime }}
             </a>
         </li>
         {% endfor %}
@@ -67,12 +67,29 @@
     function validateDate() {
         let button = document.getElementById("first_page_button");
         let date = document.getElementById("birth_date");
-        console.log(date);
+        let date_js = new Date(date.value);
+        console.log(date, date_js);
         if (!date.value) {
             console.log("Birth date is required")
+        } else if (date_js > new Date()) {
+            console.log("Date can't be further than today")
         } else {
             console.log("Value added")
             button.disabled = false;
+        }
+    }
+
+    function preventEnter(e) {
+        console.log(e);
+        if (e.key == 'Enter') {
+            e.preventDefault();
+        }
+        let button = document.getElementById("first_page_button");
+        if (e.key == 'Enter' && !button.disabled) {
+            showPage2()
+            console.log("enter passed")
+        } else {
+            return
         }
     }
 
@@ -85,5 +102,8 @@
         document.getElementById('page1').style.display = 'none';
         document.getElementById('page2').style.display = 'block';
     }
+
+
+    document.getElementById('lifetimeForm').addEventListener('keydown', preventEnter);
 </script>
 {% endblock %}

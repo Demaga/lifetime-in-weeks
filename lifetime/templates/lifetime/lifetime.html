@@ -29,8 +29,14 @@
             <div class="year-row">
                 {% for week in "x"|rjust:"26" %}
                 {% with week_number=year_start|add:forloop.counter %}
-                <div class="week {% if week_number in weeks_with_events %}has-events{% endif %} {% if week_number <= current_week %}past{% endif %} {% if death_week and week_number == death_week %}death{% endif %} {% if death_week and week_number > death_week %}after-death{% endif %}"
-                    title="Week {{ week_number }}"></div>
+                <div class="week 
+                    {% if week_number in weeks_with_events %}has-events{% endif %} 
+                    {% if week_number <= current_week %}past{% endif %} 
+                    {% if death_week and week_number == death_week %}death{% endif %} 
+                    {% if death_week and week_number > death_week %}after-death{% endif %} 
+                    {% if expected_death_week and week_number == expected_death_week %}expected-death{% endif %}"
+                    title="Week {{ week_number }}">
+                </div>
                 {% endwith %}
                 {% endfor %}
             </div>
@@ -39,8 +45,14 @@
             <div class="year-row">
                 {% for week in "x"|rjust:"26" %}
                 {% with week_number=year_start|add:26|add:forloop.counter %}
-                <div class="week {% if week_number in weeks_with_events %}has-events{% endif %} {% if week_number <= current_week %}past{% endif %} {% if death_week and week_number == death_week %}death{% endif %} {% if death_week and week_number > death_week %}after-death{% endif %}"
-                    title="Week {{ week_number }}"></div>
+                <div class="week 
+                    {% if week_number in weeks_with_events %}has-events{% endif %} 
+                    {% if week_number <= current_week %}past{% endif %} 
+                    {% if death_week and week_number == death_week %}death{% endif %} 
+                    {% if death_week and week_number > death_week %}after-death{% endif %} 
+                    {% if expected_death_week and week_number == expected_death_week %}expected-death{% endif %}"
+                    title="Week {{ week_number }}">
+                </div>
                 {% endwith %}
                 {% endfor %}
             </div>

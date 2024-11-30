@@ -11,6 +11,7 @@ class Lifetime(models.Model):
     )
     birth_date: models.DateField = models.DateField()
     death_date: models.DateField = models.DateField(null=True, blank=True)
+    life_expectancy: models.FloatField = models.FloatField(default=90)
     country = CountryField(blank=True, null=True)
     sex: models.CharField = models.CharField(
         max_length=1,

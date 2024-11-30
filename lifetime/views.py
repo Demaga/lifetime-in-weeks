@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import date, timedelta
 
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import LifetimeForm
 from .models import Lifetime, LifetimeExpectancy
@@ -11,8 +11,6 @@ def index(request):
     if request.method == "POST":
         form = LifetimeForm(request.POST)
         if form.is_valid():
-            from django.http.response import JsonResponse
-
             birth_year = form.cleaned_data["birth_date"]
             if birth_year:
                 birth_year = birth_year.year
@@ -23,20 +21,27 @@ def index(request):
             else:
                 birth_year = 2023
 
-            sex = form.cleaned_data["sex"] or "O"
             country = form.cleaned_data["country"]
+            present_countries = (
+                LifetimeExpectancy.objects.order_by()
+                .values_list("country")
+                .distinct()
+            )
+            if country not in present_countries:
+                country = None
+
+            sex = form.cleaned_data["sex"] or "O"
             life_expectancy = LifetimeExpectancy.objects.filter(
                 birth_year=birth_year, sex=sex, country=country
             ).first()
 
-            return JsonResponse(
-                {
-                    "ok": True,
-                    **form.cleaned_data,
-                    "expectancy": life_expectancy.life_expectancy,
-                    "life": str(life_expectancy),
-                }
-            )
+            lifetime_data = form.cleaned_data
+            lifetime_data["life_expectancy"] = life_expectancy.life_expectancy
+
+            lifetime = Lifetime(**lifetime_data)
+            lifetime.save()
+
+            return redirect("lifetime:detail", lifetime_id=lifetime.id)
 
     else:
         form = LifetimeForm()
@@ -72,10 +77,20 @@ def detail(request, lifetime_id):
             lifetime.birth_date, lifetime.death_date
         )
 
+    # Calculate expected death week number
+    expected_death_date = int(lifetime.life_expectancy * 365.25)
+    expected_death_date = lifetime.birth_date + timedelta(
+        days=expected_death_date
+    )
+    expected_death_week = weeks_between_two_dates(
+        lifetime.birth_date, expected_death_date
+    )
+
     context = {
         "lifetime": lifetime,
         "years": total_years,
         "current_week": current_week,
         "death_week": death_week,
+        "expected_death_week": expected_death_week,
     }
     return render(request, "lifetime/lifetime.html", context)
