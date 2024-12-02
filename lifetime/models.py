@@ -1,5 +1,6 @@
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
+from django.template.defaultfilters import slugify
 from django_countries.fields import CountryField
 
 from .utils import weeks_between_two_dates
@@ -20,7 +21,7 @@ class Lifetime(models.Model):
         blank=True,
     )
     created_by: models.ForeignKey = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.SET_NULL,
         null=True,
         related_name="created_lifetimes",
@@ -38,6 +39,18 @@ class Lifetime(models.Model):
     def is_admin_created(self):
         """Check if the Lifetime was created by an admin user"""
         return self.created_by and self.created_by.is_staff
+
+    @property
+    def slug(self):
+        return slugify(self.name)
+
+    @classmethod
+    def get_by_slug(cls, slug):
+        admin_users = User.objects.filter(is_staff=True)
+        for obj in cls.objects.filter(created_by__in=admin_users):
+            if obj.slug == slug:
+                return obj
+        return None
 
 
 class Event(models.Model):

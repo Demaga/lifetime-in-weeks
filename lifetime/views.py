@@ -59,8 +59,11 @@ def celebrities(request):
     return render(request, "lifetime/celebrities.html", context)
 
 
-def detail(request, lifetime_id):
-    lifetime = get_object_or_404(Lifetime, pk=lifetime_id)
+def detail(request, lifetime_id: int | None = None, slug: str | None = None):
+    if lifetime_id:
+        lifetime = get_object_or_404(Lifetime, pk=lifetime_id)
+    elif slug:
+        lifetime = Lifetime.get_by_slug(slug)
 
     total_years = 90  # TODO: use calculated life expectancy
 
@@ -78,9 +81,9 @@ def detail(request, lifetime_id):
         )
 
     # Calculate expected death week number
-    expected_death_date = int(lifetime.life_expectancy * 365.25)
+    expected_death_days = int(lifetime.life_expectancy * 365.25)
     expected_death_date = lifetime.birth_date + timedelta(
-        days=expected_death_date
+        days=expected_death_days
     )
     expected_death_week = weeks_between_two_dates(
         lifetime.birth_date, expected_death_date
