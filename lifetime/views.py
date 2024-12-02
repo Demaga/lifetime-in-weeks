@@ -75,10 +75,14 @@ def detail(request, lifetime_id: int | None = None, slug: str | None = None):
 
     # Calculate death week number if applicable
     death_week = None
+    death_event = None
     if lifetime.death_date:
         death_week = weeks_between_two_dates(
             lifetime.birth_date, lifetime.death_date
         )
+        death_age = lifetime.death_date.year - lifetime.birth_date.year
+        death_event = f"{lifetime.name} died on \
+            {lifetime.death_date.strftime('%b %d, %Y')} aged {death_age}"
 
     # Calculate expected death week number
     expected_death_days = int(lifetime.life_expectancy * 365.25)
@@ -94,6 +98,7 @@ def detail(request, lifetime_id: int | None = None, slug: str | None = None):
         "years": total_years,
         "current_week": current_week,
         "death_week": death_week,
+        "death_event": death_event,
         "expected_death_week": expected_death_week,
     }
     return render(request, "lifetime/lifetime.html", context)
