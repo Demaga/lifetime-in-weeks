@@ -49,17 +49,7 @@
 
 {% if recent_lifetimes %}
 <section class="recent-lifetimes">
-    <h2>Recenttly Added</h2>
-    <ul>
-        {% for lifetime in recent_lifetimes %}
-        <li>
-            <a href="{% url 'lifetime:detail' lifetime.id %}">
-                {{ lifetime }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="/celebrities">See all celebrities</a>
+    <a href="/celebrities">See celebrities' lifetimes</a>
 </section>
 {% endif %}
 

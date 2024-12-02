@@ -10,6 +10,15 @@ header {
     margin-bottom: 2rem;
 }
 
+.recent-lifetimes {
+    text-align: center;
+}
+
+.recent-lifetimes ul {
+    list-style: none;
+    padding: 0px;
+}
+
 .lifetime-form {
     max-width: 500px;
     margin: 0 auto;
