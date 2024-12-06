@@ -5,7 +5,7 @@
 <div id="overlay"></div>
 <header>
     <h1>
-        <a href="/" style="text-decoration: none; color: black;">Lifetime in Weeks</a>
+        <a href="/" style="text-decoration: none; color: inherit; border: none;">Lifetime in Weeks</a>
     </h1>
 
     {% if lifetime.name %}
@@ -72,6 +72,7 @@
                     {% if expected_death_week and week_number == expected_death_week %}expected-death{% endif %}"
                     title="Week {{ week_number }}" onclick="weekDetails(this);">
                     <div class="week-details hidden">
+                        <span>Week {{ week_number }}</span>
                         {% if week_number in weeks_with_events %}
                         {% map_weeks_to_events lifetime.events.all week_number as week_events %}
                         {% for event in week_events %}
@@ -81,6 +82,8 @@
                         {% endfor %}
                         {% elif death_week and week_number == death_week %}
                         <p>{{ death_event }}</p>
+                        {% elif week_number > death_week %}
+                        <p>{{ lifetime.name }} didn't live to see this week.</p>
                         {% else %}
                         <p>Nothing particularly interesting happened this week.</p>
                         {% endif %}
@@ -102,6 +105,7 @@
                     {% if expected_death_week and week_number == expected_death_week %}expected-death{% endif %}"
                     title="Week {{ week_number }}" onclick="weekDetails(this);">
                     <div class="week-details hidden">
+                        <span>Week {{ week_number }}</span>
                         {% if week_number in weeks_with_events %}
                         {% map_weeks_to_events lifetime.events.all week_number as week_events %}
                         {% for event in week_events %}
@@ -111,6 +115,8 @@
                         {% endfor %}
                         {% elif death_week and week_number == death_week %}
                         <p>{{ death_event }}</p>
+                        {% elif week_number > death_week %}
+                        <p>{{ lifetime.name }} didn't live to see this week.</p>
                         {% else %}
                         <p>Nothing particularly interesting happened this week.</p>
                         {% endif %}

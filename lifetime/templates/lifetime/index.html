@@ -11,12 +11,9 @@
         {% csrf_token %}
 
         <div class="form-page" id="page1">
-            <h2>Enter Birth Date</h2>
             <div class="form-group">
                 <label for="birth_date">Birth Date:</label>
                 <input type="date" id="birth_date" name="birth_date" oninput="validateDate()" required>
-            </div>
-            <div class="button-group">
                 <button id="first_page_button" type="button" onclick="showPage2()" disabled>Continue</button>
             </div>
         </div>

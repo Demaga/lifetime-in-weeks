@@ -1,13 +1,65 @@
 body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 20px;
+    padding: 0px;
+    margin: 0px;
+    background-color: #FAF5E8;
+    color: #CE6530;
+}
+
+main {
+    min-height: calc(100vh - 120px);
+    min-width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 header {
     text-align: center;
     margin-bottom: 2rem;
+}
+
+footer {
+    text-align: center;;
+    clear: both;
+    position: relative;
+    height: 80px;
+    border-top: 1px solid black;
+}
+
+a {
+    text-decoration: none;
+    color: #87ACB2;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover {
+    border-color: #87ACB2;;
+    transition: 0.4s;
+}
+
+button {
+    color: #FAF5E8;
+    background-color: #CE6530;
+    border-radius: 3px;
+    border: transparent;
+    padding: 5px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: auto;
+    filter: brightness(80%);
+}
+
+select {
+    color: #FAF5E8;
+    background-color: #CE6530;
+    border-radius: 3px;
+    border: transparent;
+    padding: 5px;
 }
 
 .recent-lifetimes {
@@ -59,13 +111,6 @@ input[type="date"] {
     margin-top: 2rem;
 }
 
-footer {
-    text-align: center;
-    margin-top: 2rem;
-    padding: 1rem;
-    border-top: 1px solid #ddd;
-}
-
 .weeks-container {
     display: flex;
     max-width: 80%;
@@ -112,14 +157,10 @@ footer {
 .week {
     width: 25px;
     height: 25px;
-    background-color: #eee;
+    background-color: #F0E1BC;
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.2s;
-}
-
-.week:hover {
-    background-color: #ddd;
 }
 
 .week.has-events {
@@ -135,11 +176,15 @@ footer {
 }
 
 .week.after-death {
-    background-color: #999;
+    background-color: #C7C7C7;
 }
 
 .week.expected-death {
     background-color: #666;
+}
+
+.week:hover {
+    background-color: #EDAA47;
 }
 
 @media (max-width: 768px) {
@@ -167,12 +212,13 @@ footer {
 .week-details {
     width: 300px;
     border-radius: 5px;
-    border: 2px solid black;
-    background: #F4EFCF;
+    border: 2px solid #41261E;
+    background:#FAF5E8;
     z-index: 5;
     position: absolute;
-    padding: 2px 5px;
-    color: black;
+    padding: 5px 5px;
+    color: #1C1B18;
+    cursor: auto;
 }
 
 .week-details span {
@@ -195,9 +241,14 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
     /* Semi-transparent background */
     z-index: 1;
     justify-content: center;
     align-items: center;
+    transition: 0.4s;
+}
+
+#overlay:hover {
+    cursor: pointer;
 }
